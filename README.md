@@ -21,7 +21,7 @@ Even though this project is made for private learning purposes I would never dec
 
 - validation
 - login
-- pagination
+- pagination (might want to revisit later for a "better" response)
 - graphql?! why is this a thing?! D:
 
 ## License
