@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi"
+	"github.com/go-playground/validator/v10"
 	"github.com/schattenbrot/mini-blog-api/database/dbrepo"
 	"github.com/schattenbrot/mini-blog-api/models"
 )
@@ -23,6 +24,12 @@ func (m *Repository) InsertPost(w http.ResponseWriter, r *http.Request) {
 	post.UpdatedAt = time.Now()
 
 	// TODO: validation
+	v := validator.New()
+	err = v.Struct(post)
+	if err != nil {
+		errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
 
 	id, err := m.DB.InsertPost(post)
 	if err != nil {
@@ -91,6 +98,13 @@ func (m *Repository) UpdatePostById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	post.ID = id
+
+	v := validator.New()
+	err = v.Struct(post)
+	if err != nil {
+		errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
 
 	err = m.DB.UpdatePost(post)
 	if err != nil {
