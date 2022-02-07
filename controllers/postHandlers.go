@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 	"time"
@@ -28,7 +29,12 @@ func (m *Repository) InsertPost(w http.ResponseWriter, r *http.Request) {
 	v := validator.New()
 	err = v.Struct(post)
 	if err != nil {
-		errorJSON(w, err, http.StatusBadRequest)
+		errorJSON(w, err)
+		return
+	}
+	if post.Text == "" || post.Title == "" {
+		err := errors.New("text and title are required")
+		errorJSON(w, err)
 		return
 	}
 
@@ -94,25 +100,25 @@ func (m *Repository) GetAllPostsPaginated(w http.ResponseWriter, r *http.Request
 
 	limit, err := strconv.Atoi(query.Get("limit"))
 	if err != nil {
-		m.App.Logger.Println("failed1")
+		errorJSON(w, err)
 		return
 	}
 
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil {
-		m.App.Logger.Println("failed2")
+		errorJSON(w, err)
 		return
 	}
 
 	posts, err := m.DB.GetPostsByPage(page, limit)
 	if err != nil {
-		m.App.Logger.Println("nyope")
+		errorJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	err = writeJSON(w, http.StatusOK, posts)
 	if err != nil {
-		m.App.Logger.Println("uwuuwuwuwuw")
+		errorJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }
