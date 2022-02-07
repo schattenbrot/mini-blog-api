@@ -5,6 +5,8 @@ A basic API for a blog page.
 ## Used dependencies & Credits
 
 - [Viper](https://github.com/spf13/viper) for .env files.
+- [Chi-router](https://github.com/go-chi/chi)
+- [Validation](https://github.com/go-playground/validator)
 
 ## Usage
 
