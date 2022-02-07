@@ -19,10 +19,12 @@ func routes() *chi.Mux {
 
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/", controllers.Repo.GetAllPosts)
+		r.Get("/paging", controllers.Repo.GetAllPostsPaginated)
 		r.Get("/{id}", controllers.Repo.GetPostById)
 		r.Post("/", controllers.Repo.InsertPost)
 		r.Delete("/{id}", controllers.Repo.DeletePost)
 		r.Patch("/{id}", controllers.Repo.UpdatePostById)
+
 	})
 
 	return r

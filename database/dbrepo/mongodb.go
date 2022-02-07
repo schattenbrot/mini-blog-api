@@ -8,6 +8,7 @@ import (
 	"github.com/schattenbrot/mini-blog-api/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var ErrorTitleAndTextEmpty = "title and text cannot be empty"
@@ -90,6 +91,37 @@ func (m *mongoDBRepo) GetPosts() ([]*models.Post, error) {
 	filter := bson.D{}
 
 	cursor, err := collection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	for cursor.Next(ctx) {
+		var post Post
+		cursor.Decode(&post)
+
+		newPost := toModelPost(&post)
+
+		posts = append(posts, &newPost)
+	}
+
+	return posts, nil
+}
+
+func (m *mongoDBRepo) GetPostsByPage(page, limit int) ([]*models.Post, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	posts := []*models.Post{}
+
+	collection := m.DB.Collection("posts")
+
+	filter := bson.M{}
+	findOptions := options.FindOptions{}
+	findOptions.SetSkip((int64(page) - 1) * int64(limit))
+	findOptions.SetLimit(int64(limit))
+
+	cursor, err := collection.Find(ctx, filter, &findOptions)
 	if err != nil {
 		return nil, err
 	}

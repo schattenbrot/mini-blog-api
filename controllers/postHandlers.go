@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -85,6 +86,34 @@ func (m *Repository) GetAllPosts(w http.ResponseWriter, r *http.Request) {
 	err = writeJSON(w, http.StatusOK, posts)
 	if err != nil {
 		errorJSON(w, err, http.StatusInternalServerError)
+	}
+}
+
+func (m *Repository) GetAllPostsPaginated(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query()
+
+	limit, err := strconv.Atoi(query.Get("limit"))
+	if err != nil {
+		m.App.Logger.Println("failed1")
+		return
+	}
+
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil {
+		m.App.Logger.Println("failed2")
+		return
+	}
+
+	posts, err := m.DB.GetPostsByPage(page, limit)
+	if err != nil {
+		m.App.Logger.Println("nyope")
+		return
+	}
+
+	err = writeJSON(w, http.StatusOK, posts)
+	if err != nil {
+		m.App.Logger.Println("uwuuwuwuwuw")
+		return
 	}
 }
 

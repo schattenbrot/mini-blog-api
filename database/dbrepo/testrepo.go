@@ -25,3 +25,7 @@ func (m *testDBRepo) DeleteOnePost(id string) error {
 func (m *testDBRepo) GetPostById(id string) (*models.Post, error) {
 	return nil, nil
 }
+
+func (m *testDBRepo) GetPostsByPage(page, limit int) ([]*models.Post, error) {
+	return nil, nil
+}

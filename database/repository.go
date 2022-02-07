@@ -10,6 +10,7 @@ type DatabaseRepo interface {
 
 	GetPosts() ([]*models.Post, error)
 	GetPostById(id string) (*models.Post, error)
+	GetPostsByPage(page, limit int) ([]*models.Post, error)
 
 	UpdatePost(p models.Post) error
 
