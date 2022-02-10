@@ -1,4 +1,4 @@
-package main
+package routes
 
 import (
 	"github.com/go-chi/chi"
@@ -7,7 +7,7 @@ import (
 )
 
 // func (app *Application) routes() *chi.Mux {
-func routes() *chi.Mux {
+func Routes() *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Use(cors.Handler(cors.Options{

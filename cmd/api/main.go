@@ -10,6 +10,7 @@ import (
 
 	"github.com/schattenbrot/mini-blog-api/config"
 	"github.com/schattenbrot/mini-blog-api/controllers"
+	"github.com/schattenbrot/mini-blog-api/routes"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -43,7 +44,7 @@ func main() {
 
 	serve := &http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.Port),
-		Handler:      routes(),
+		Handler:      routes.Routes(),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
