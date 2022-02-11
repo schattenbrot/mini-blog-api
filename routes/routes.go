@@ -25,14 +25,17 @@ func Routes() *chi.Mux {
 }
 
 func postRouter(r chi.Router) {
+	r.Post("/", controllers.Repo.InsertPost)
 	r.Get("/", controllers.Repo.GetAllPosts)
 	r.Get("/paging", controllers.Repo.GetAllPostsPaginated)
 	r.Get("/{id}", controllers.Repo.GetPostById)
-	r.Post("/", controllers.Repo.InsertPost)
-	r.Delete("/{id}", controllers.Repo.DeletePost)
 	r.Patch("/{id}", controllers.Repo.UpdatePostById)
+	r.Delete("/{id}", controllers.Repo.DeletePost)
 }
 
 func userRouter(r chi.Router) {
 	r.Post("/", controllers.Repo.InsertUser)
+	r.Get("/{id}", controllers.Repo.GetUserById)
+	r.Patch("/{id}", controllers.Repo.UpdateUserById)
+	r.Delete("/{id}", controllers.Repo.DeleteUser)
 }

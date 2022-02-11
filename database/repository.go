@@ -14,7 +14,7 @@ type DatabaseRepo interface {
 	DeleteOnePost(id string) error
 
 	InsertUser(u models.User) (*string, error)
-	// GetUserById(id string) (*models.User, error)
-	// UpdateUser(u models.User) error
-	// DeleteUser(id string) error
+	GetUserById(id string) (*models.User, error)
+	UpdateUser(u models.User) error
+	DeleteUser(id string) error
 }

@@ -3,6 +3,7 @@ package dbrepo
 import (
 	"context"
 	"errors"
+	"log"
 	"time"
 
 	"github.com/schattenbrot/mini-blog-api/models"
@@ -13,6 +14,7 @@ import (
 
 var ErrorTitleAndTextEmpty = "title and text cannot be empty"
 var ErrorDocumentNotFound = "document not found"
+var ErrorNameEmailPasswordEmpty = "either name or email or password cannot be empty"
 
 type Post struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
@@ -24,11 +26,11 @@ type Post struct {
 
 type User struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
-	Name      string             `bson:"name"`
-	Email     string             `bson:"email" validate:"omitempty,email"`
-	Password  string             `bson:"password"`
-	Roles     []string           `bson:"roles"`
-	CreatedAt time.Time          `bson:"created_at"`
+	Name      string             `bson:"name,omitempty"`
+	Email     string             `bson:"email,omitempty" validate:"omitempty,email"`
+	Password  string             `bson:"password,omitempty"`
+	Roles     []string           `bson:"roles,omitempty"`
+	CreatedAt time.Time          `bson:"created_at,omitempty"`
 }
 
 func toModelPost(post *Post) models.Post {
@@ -40,6 +42,18 @@ func toModelPost(post *Post) models.Post {
 	modelPost.UpdatedAt = post.UpdatedAt
 
 	return modelPost
+}
+
+func toModelUser(user *User) models.User {
+	var modelUser models.User
+	modelUser.ID = user.ID.Hex()
+	modelUser.Name = user.Name
+	modelUser.Email = user.Email
+	modelUser.Password = user.Password
+	modelUser.Roles = user.Roles
+	modelUser.CreatedAt = user.CreatedAt
+
+	return modelUser
 }
 
 func (m *mongoDBRepo) InsertPost(p models.Post) (*string, error) {
@@ -237,6 +251,98 @@ func (m *mongoDBRepo) InsertUser(u models.User) (*string, error) {
 	return &oid, nil
 }
 
-// GetUserById(id string) (*models.User, error)
-// UpdateUser(u models.User) error
-// DeleteUser(id string) error
+func (m *mongoDBRepo) GetUserById(id string) (*models.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var user User
+
+	log.Println("UserID:", id)
+
+	oid, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Println("UserObjectID:", oid)
+
+	filter := User{ID: oid}
+
+	collection := m.DB.Collection("users")
+
+	err = collection.FindOne(ctx, filter).Decode(&user)
+	if err != nil {
+		return nil, err
+	}
+
+	fetchedUser := toModelUser(&user)
+
+	return &fetchedUser, nil
+}
+
+func (m *mongoDBRepo) UpdateUser(u models.User) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if u.Name == "" && u.Email == "" && u.Password == "" {
+		return errors.New(ErrorNameEmailPasswordEmpty)
+	}
+
+	var user User
+	if u.Name != "" {
+		user.Name = u.Name
+	}
+	if u.Email != "" {
+		user.Email = u.Email
+	}
+	if u.Password != "" {
+		user.Password = u.Password
+	}
+
+	collection := m.DB.Collection("users")
+
+	oid, err := primitive.ObjectIDFromHex(u.ID)
+	if err != nil {
+		return err
+	}
+
+	update := bson.M{"$set": user}
+
+	result, err := collection.UpdateByID(ctx, oid, update)
+	if err != nil {
+		return err
+	}
+
+	if result.ModifiedCount == 0 {
+		err = errors.New(ErrorDocumentNotFound)
+		return err
+	}
+
+	return nil
+}
+
+func (m *mongoDBRepo) DeleteUser(id string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	oid, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	collection := m.DB.Collection("users")
+
+	filter := User{ID: oid}
+
+	result, err := collection.DeleteOne(ctx, filter)
+	if err != nil {
+		return err
+	}
+
+	if result.DeletedCount == 0 {
+		err = errors.New(ErrorDocumentNotFound)
+		return err
+	}
+
+	return nil
+}

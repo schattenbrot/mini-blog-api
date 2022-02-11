@@ -14,9 +14,9 @@ type Post struct {
 
 type User struct {
 	ID        string    `json:"id,omitempty"`
-	Name      string    `json:"name" validate:"min=3,max=20"`
-	Email     string    `json:"email" validate:"email"`
-	Password  string    `json:"password" validate:"min=8,max=24"`
+	Name      string    `json:"name" validate:"omitempty,min=3,max=20"`
+	Email     string    `json:"email" validate:"omitempty,email"`
+	Password  string    `json:"password" validate:"omitempty,min=8,max=24"`
 	Roles     []string  `json:"roles"`
 	CreatedAt time.Time `json:"created_at"`
 }
