@@ -29,3 +29,18 @@ func (m *testDBRepo) GetPostById(id string) (*models.Post, error) {
 func (m *testDBRepo) GetPostsByPage(page, limit int) ([]*models.Post, error) {
 	return nil, nil
 }
+
+func (m *testDBRepo) InsertUser(u models.User) (*string, error) {
+	var s string
+	return &s, nil
+}
+func (m *testDBRepo) GetUserById(id string) (*models.User, error) {
+	var user models.User
+	return &user, nil
+}
+func (m *testDBRepo) UpdateUser(u models.User) error {
+	return nil
+}
+func (m *testDBRepo) DeleteUser(id string) error {
+	return nil
+}

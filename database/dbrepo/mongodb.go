@@ -22,6 +22,15 @@ type Post struct {
 	UpdatedAt time.Time          `bson:"updated_at,omitempty"`
 }
 
+type User struct {
+	ID        primitive.ObjectID `bson:"_id,omitempty"`
+	Name      string             `bson:"name"`
+	Email     string             `bson:"email" validate:"omitempty,email"`
+	Password  string             `bson:"password"`
+	Roles     []string           `bson:"roles"`
+	CreatedAt time.Time          `bson:"created_at"`
+}
+
 func toModelPost(post *Post) models.Post {
 	var modelPost models.Post
 	modelPost.ID = post.ID.Hex()
@@ -203,3 +212,31 @@ func (m *mongoDBRepo) DeleteOnePost(id string) error {
 
 	return nil
 }
+
+func (m *mongoDBRepo) InsertUser(u models.User) (*string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	user := User{
+		Name:      u.Name,
+		Email:     u.Email,
+		Password:  u.Password,
+		Roles:     u.Roles,
+		CreatedAt: time.Now(),
+	}
+
+	collection := m.DB.Collection("users")
+
+	result, err := collection.InsertOne(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+
+	oid := result.InsertedID.(primitive.ObjectID).Hex()
+
+	return &oid, nil
+}
+
+// GetUserById(id string) (*models.User, error)
+// UpdateUser(u models.User) error
+// DeleteUser(id string) error
