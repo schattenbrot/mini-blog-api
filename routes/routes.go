@@ -29,6 +29,7 @@ func Routes() *chi.Mux {
 func secureRouter(r chi.Router) {
 	r.Use(Repo.IsAuth)
 	r.Get("/{id}", controllers.Repo.GetUserById)
+	r.Get("/logout", controllers.Repo.LogoutUser)
 }
 
 func postRouter(r chi.Router) {

@@ -80,5 +80,21 @@ func (m *Repository) LoginUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) LogoutUser(w http.ResponseWriter, r *http.Request) {
+	cookie := &http.Cookie{
+		Name:     "jwt",
+		Path:     "/",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HttpOnly: true,
+	}
 
+	http.SetCookie(w, cookie)
+
+	type jsonResp struct {
+		OK bool `json:"ok"`
+	}
+
+	writeJSON(w, http.StatusOK, jsonResp{
+		OK: true,
+	})
 }
