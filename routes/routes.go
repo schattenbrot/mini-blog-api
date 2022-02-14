@@ -10,8 +10,9 @@ func Routes() *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Use(cors.Handler(cors.Options{
-		AllowedMethods: []string{"GET", "POST", "PATCH", "DELETE"},
-		MaxAge:         300,
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE"},
+		AllowCredentials: true,
+		MaxAge:           300,
 	}))
 
 	r.Get("/", controllers.Repo.StatusHandler)
@@ -19,9 +20,15 @@ func Routes() *chi.Mux {
 	r.Route("/v1", func(r chi.Router) {
 		r.Route("/posts", postRouter)
 		r.Route("/users", userRouter)
+		r.Route("/secure", secureRouter)
 	})
 
 	return r
+}
+
+func secureRouter(r chi.Router) {
+	r.Use(Repo.IsAuth)
+	r.Get("/{id}", controllers.Repo.GetUserById)
 }
 
 func postRouter(r chi.Router) {
@@ -38,4 +45,6 @@ func userRouter(r chi.Router) {
 	r.Get("/{id}", controllers.Repo.GetUserById)
 	r.Patch("/{id}", controllers.Repo.UpdateUserById)
 	r.Delete("/{id}", controllers.Repo.DeleteUser)
+
+	r.Post("/login", controllers.Repo.LoginUser)
 }

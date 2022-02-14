@@ -3,7 +3,6 @@ package dbrepo
 import (
 	"context"
 	"errors"
-	"log"
 	"time"
 
 	"github.com/schattenbrot/mini-blog-api/models"
@@ -257,14 +256,10 @@ func (m *mongoDBRepo) GetUserById(id string) (*models.User, error) {
 
 	var user User
 
-	log.Println("UserID:", id)
-
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
 	}
-
-	log.Println("UserObjectID:", oid)
 
 	filter := User{ID: oid}
 

@@ -19,8 +19,8 @@ Even though this project is made for private learning purposes I would never dec
 
 ## TODO
 
-- validation
-- login
+- validation (done for now)
+- login (in process)
 - pagination (might want to revisit later for a "better" response)
 - graphql?! why is this a thing?! D:
 

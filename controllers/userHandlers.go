@@ -9,8 +9,8 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-playground/validator/v10"
 	"github.com/schattenbrot/mini-blog-api/database/dbrepo"
-	"github.com/schattenbrot/mini-blog-api/helpers"
 	"github.com/schattenbrot/mini-blog-api/models"
+	"github.com/schattenbrot/mini-blog-api/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -33,7 +33,7 @@ func (m *Repository) InsertUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	passwordValid := helpers.PasswordIsValid(user.Password)
+	passwordValid := utils.PasswordIsValid(user.Password)
 	if !passwordValid {
 		err = errors.New("password is not valid")
 		errorJSON(w, err)
@@ -110,7 +110,7 @@ func (m *Repository) UpdateUserById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if user.Password != "" {
-		passwordValid := helpers.PasswordIsValid(user.Password)
+		passwordValid := utils.PasswordIsValid(user.Password)
 		if !passwordValid {
 			err = errors.New("password is not valid")
 			errorJSON(w, err)

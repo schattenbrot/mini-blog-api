@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/schattenbrot/mini-blog-api/config"
 	"github.com/schattenbrot/mini-blog-api/controllers"
 	"github.com/schattenbrot/mini-blog-api/routes"
@@ -26,11 +27,13 @@ func main() {
 	config.LoadConfig(&cfg)
 
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
+	validator := validator.New()
 
 	app := &config.AppConfig{
-		Version: "1.0.0",
-		Config:  cfg,
-		Logger:  logger,
+		Version:   "1.0.0",
+		Config:    cfg,
+		Logger:    logger,
+		Validator: validator,
 	}
 	App = &Application{
 		App: app,
@@ -38,9 +41,10 @@ func main() {
 
 	db := openDB()
 
-	// repo := controllers.NewTestRepo(app)
 	repo := controllers.NewMongoDBRepo(app, db)
 	controllers.NewHandlers(repo)
+	routeRepo := routes.NewMongoDBRepo(app, db)
+	routes.NewHandlers(routeRepo)
 
 	serve := &http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.Port),

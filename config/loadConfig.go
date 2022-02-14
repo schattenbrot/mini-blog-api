@@ -36,4 +36,10 @@ func LoadConfig(cfg *Config) {
 		log.Fatal("could not find dsn")
 	}
 	cfg.DB.DSN = dsn
+
+	jwt, ok := viper.Get("JWT_TOKEN_SECRET").(string)
+	if !ok {
+		log.Fatal("could not find jwt token secret")
+	}
+	cfg.JWT = []byte(jwt)
 }

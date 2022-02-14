@@ -2,6 +2,8 @@ package config
 
 import (
 	"log"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type Config struct {
@@ -10,10 +12,12 @@ type Config struct {
 	DB   struct {
 		DSN string
 	}
+	JWT []byte
 }
 
 type AppConfig struct {
-	Version string
-	Config  Config
-	Logger  *log.Logger
+	Version   string
+	Config    Config
+	Logger    *log.Logger
+	Validator *validator.Validate
 }

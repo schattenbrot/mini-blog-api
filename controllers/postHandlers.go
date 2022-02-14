@@ -25,9 +25,7 @@ func (m *Repository) InsertPost(w http.ResponseWriter, r *http.Request) {
 	post.CreatedAt = time.Now()
 	post.UpdatedAt = time.Now()
 
-	// TODO: validation
-	v := validator.New()
-	err = v.Struct(post)
+	err = m.App.Validator.Struct(post)
 	if err != nil {
 		errorJSON(w, err)
 		return
