@@ -20,9 +20,10 @@ Even though this project is made for private learning purposes I would never dec
 ## TODO
 
 - validation (done for now)
-- login (in process)
+- login/logout done
 - pagination (might want to revisit later for a "better" response)
 - graphql?! why is this a thing?! D:
+  - still cba'd
 
 ## License
 

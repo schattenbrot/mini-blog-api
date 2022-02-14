@@ -275,6 +275,26 @@ func (m *mongoDBRepo) GetUserById(id string) (*models.User, error) {
 	return &fetchedUser, nil
 }
 
+func (m *mongoDBRepo) GetUserByEmail(email string) (*models.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var user User
+
+	filter := User{Email: email}
+
+	collection := m.DB.Collection("users")
+
+	err := collection.FindOne(ctx, filter).Decode(&user)
+	if err != nil {
+		return nil, err
+	}
+
+	fetchedUser := toModelUser(&user)
+
+	return &fetchedUser, nil
+}
+
 func (m *mongoDBRepo) UpdateUser(u models.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

@@ -44,3 +44,6 @@ func (m *testDBRepo) UpdateUser(u models.User) error {
 func (m *testDBRepo) DeleteUser(id string) error {
 	return nil
 }
+func (m *testDBRepo) GetUserByEmail(email string) (*models.User, error) {
+	return nil, nil
+}

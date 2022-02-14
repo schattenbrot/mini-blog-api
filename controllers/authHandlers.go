@@ -11,7 +11,7 @@ import (
 )
 
 type LoginUser struct {
-	ID       string `json:"id" validate:"required,len=24"`
+	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=8,max=24"`
 }
 
@@ -22,7 +22,6 @@ func (m *Repository) LoginUser(w http.ResponseWriter, r *http.Request) {
 		errorJSON(w, err)
 		return
 	}
-	m.App.Logger.Println(loginUser.ID)
 
 	// validate inputs
 	err = m.App.Validator.Struct(loginUser)
@@ -31,7 +30,7 @@ func (m *Repository) LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := m.DB.GetUserById(loginUser.ID)
+	user, err := m.DB.GetUserByEmail(loginUser.Email)
 	if err != nil {
 		if err == mongo.ErrNilDocument {
 			errorJSON(w, err, http.StatusNotFound)
