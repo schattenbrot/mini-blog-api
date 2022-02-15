@@ -13,6 +13,7 @@ import (
 	"github.com/schattenbrot/mini-blog-api/models"
 )
 
+// InsertPost is the handler for adding posts.
 func (m *Repository) InsertPost(w http.ResponseWriter, r *http.Request) {
 	var post models.Post
 
@@ -58,6 +59,7 @@ func (m *Repository) InsertPost(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetPostById is the handler for getting a post by its ID.
 func (m *Repository) GetPostById(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	post, err := m.DB.GetPostById(id)
@@ -80,6 +82,7 @@ func (m *Repository) GetPostById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetAllPosts is the handler for retrieving all posts.
 func (m *Repository) GetAllPosts(w http.ResponseWriter, r *http.Request) {
 	posts, err := m.DB.GetPosts()
 	if err != nil {
@@ -93,7 +96,8 @@ func (m *Repository) GetAllPosts(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (m *Repository) GetAllPostsPaginated(w http.ResponseWriter, r *http.Request) {
+// GetPaginatedPost is the handler for retrieving a paginated slice of posts.
+func (m *Repository) GetPaginatedPosts(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 
 	limit, err := strconv.Atoi(query.Get("limit"))
@@ -121,6 +125,8 @@ func (m *Repository) GetAllPostsPaginated(w http.ResponseWriter, r *http.Request
 	}
 }
 
+// UpdatePostById is the handler for updating a post by its ID.
+// The body of the update needs either the text or the title of the post.
 func (m *Repository) UpdatePostById(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
@@ -155,6 +161,7 @@ func (m *Repository) UpdatePostById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// DeletePost deletes a post by its ID.
 func (m *Repository) DeletePost(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 

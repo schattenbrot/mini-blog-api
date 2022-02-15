@@ -15,6 +15,7 @@ var ErrorTitleAndTextEmpty = "title and text cannot be empty"
 var ErrorDocumentNotFound = "document not found"
 var ErrorNameEmailPasswordEmpty = "either name or email or password cannot be empty"
 
+// Post is the Post type used for communication with the mongo driver.
 type Post struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
 	Title     string             `bson:"title,omitempty"`
@@ -23,6 +24,7 @@ type Post struct {
 	UpdatedAt time.Time          `bson:"updated_at,omitempty"`
 }
 
+// User is the User type used for communication with the mongo driver.
 type User struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
 	Name      string             `bson:"name,omitempty"`
@@ -32,6 +34,7 @@ type User struct {
 	CreatedAt time.Time          `bson:"created_at,omitempty"`
 }
 
+// toModelPost converts a mongoPost to a models.Post.
 func toModelPost(post *Post) models.Post {
 	var modelPost models.Post
 	modelPost.ID = post.ID.Hex()
@@ -43,6 +46,7 @@ func toModelPost(post *Post) models.Post {
 	return modelPost
 }
 
+// toModelUser converts a mongoUser to a models.User.
 func toModelUser(user *User) models.User {
 	var modelUser models.User
 	modelUser.ID = user.ID.Hex()
@@ -55,6 +59,8 @@ func toModelUser(user *User) models.User {
 	return modelUser
 }
 
+// InsertPost inserts a given post into the database.
+// Returns the post ID of the inserted post and an error if any occured.
 func (m *mongoDBRepo) InsertPost(p models.Post) (*string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -77,6 +83,8 @@ func (m *mongoDBRepo) InsertPost(p models.Post) (*string, error) {
 	return &oid, nil
 }
 
+// GetPostById gets a post from the database by its ID.
+// Returns a post and an error if any occured.
 func (m *mongoDBRepo) GetPostById(id string) (*models.Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -102,6 +110,8 @@ func (m *mongoDBRepo) GetPostById(id string) (*models.Post, error) {
 	return &modelPost, nil
 }
 
+// GetPosts gets a list of posts from the database.
+// Returns a list of posts and an error if any occured.
 func (m *mongoDBRepo) GetPosts() ([]*models.Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -130,6 +140,8 @@ func (m *mongoDBRepo) GetPosts() ([]*models.Post, error) {
 	return posts, nil
 }
 
+// GetPostsByPage gets a list of posts by page number and page limit.
+// Returns a list of posts and an error if any occured.
 func (m *mongoDBRepo) GetPostsByPage(page, limit int) ([]*models.Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -161,6 +173,8 @@ func (m *mongoDBRepo) GetPostsByPage(page, limit int) ([]*models.Post, error) {
 	return posts, nil
 }
 
+// UpdatePost updates a given post in the database.
+// Returns an error if any occured.
 func (m *mongoDBRepo) UpdatePost(p models.Post) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -200,6 +214,8 @@ func (m *mongoDBRepo) UpdatePost(p models.Post) error {
 	return nil
 }
 
+// DeleteOnePost deletes one post from the database by its ID.
+// Returns an error if any occured.
 func (m *mongoDBRepo) DeleteOnePost(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -226,6 +242,8 @@ func (m *mongoDBRepo) DeleteOnePost(id string) error {
 	return nil
 }
 
+// InsertUser inserts a given user into the database.
+// Returns the user ID of the inserted user and an error if any occured.
 func (m *mongoDBRepo) InsertUser(u models.User) (*string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -250,6 +268,8 @@ func (m *mongoDBRepo) InsertUser(u models.User) (*string, error) {
 	return &oid, nil
 }
 
+// GetUserById retrieves a user from the database by its ID.
+// Returns a user and an error if any occured.
 func (m *mongoDBRepo) GetUserById(id string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -275,6 +295,8 @@ func (m *mongoDBRepo) GetUserById(id string) (*models.User, error) {
 	return &fetchedUser, nil
 }
 
+// GetUserByMail retrieves a user from the database by its email.
+// Returns a user and an error if any occured.
 func (m *mongoDBRepo) GetUserByEmail(email string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -295,6 +317,8 @@ func (m *mongoDBRepo) GetUserByEmail(email string) (*models.User, error) {
 	return &fetchedUser, nil
 }
 
+// UpdateUser updates a given user.
+// Returns an error if any occured.
 func (m *mongoDBRepo) UpdateUser(u models.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -336,6 +360,8 @@ func (m *mongoDBRepo) UpdateUser(u models.User) error {
 	return nil
 }
 
+// DeleteUser deletes a user from the database by its ID.
+// Returns an error if any occured.
 func (m *mongoDBRepo) DeleteUser(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

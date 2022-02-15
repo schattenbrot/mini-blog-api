@@ -10,12 +10,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// LoginUser is the type for authentication-request bodies
 type LoginUser struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=8,max=24"`
 }
 
-func (m *Repository) LoginUser(w http.ResponseWriter, r *http.Request) {
+// Login is the handler for logging a user in with the given email and password.
+// Sets a cookie if successful or an error message.
+func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	var loginUser LoginUser
 	err := json.NewDecoder(r.Body).Decode(&loginUser)
 	if err != nil {
@@ -23,7 +26,6 @@ func (m *Repository) LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// validate inputs
 	err = m.App.Validator.Struct(loginUser)
 	if err != nil {
 		errorJSON(w, err)
@@ -78,7 +80,8 @@ func (m *Repository) LoginUser(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (m *Repository) LogoutUser(w http.ResponseWriter, r *http.Request) {
+// Logout logs the user out
+func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	cookie := &http.Cookie{
 		Name:     "jwt",
 		Path:     "/",

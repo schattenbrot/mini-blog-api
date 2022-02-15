@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// LoadConfig loads the .env file and fills the base configuration.
 func LoadConfig(cfg *Config) {
 	viper.SetConfigFile(".env")
 

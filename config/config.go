@@ -6,6 +6,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// Config represents the app's base configuration.
 type Config struct {
 	Port int
 	Env  string
@@ -15,6 +16,7 @@ type Config struct {
 	JWT []byte
 }
 
+// AppConfig represents the shared application configuration.
 type AppConfig struct {
 	Version   string
 	Config    Config

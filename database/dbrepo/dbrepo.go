@@ -18,12 +18,14 @@ type mongoDBRepo struct {
 	DB  *mongo.Database
 }
 
+// NewTestingRepo is the function for returning a testDBRepo.
 func NewTestingRepo(app *config.AppConfig) database.DatabaseRepo {
 	return &testDBRepo{
 		App: app,
 	}
 }
 
+// NewMongoDBRepo is the function for returning a mongoDBRepo.
 func NewMongoDBRepo(app *config.AppConfig, conn *mongo.Database) database.DatabaseRepo {
 	return &mongoDBRepo{
 		App: app,

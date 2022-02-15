@@ -11,6 +11,7 @@ type appStatus struct {
 	Version     string `json:"version"`
 }
 
+// StatusHandler is the handler for getting the apps status information.
 func (m *Repository) StatusHandler(w http.ResponseWriter, r *http.Request) {
 	currentStatus := appStatus{
 		Status:      "Available",

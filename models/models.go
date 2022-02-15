@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// Post describes the globally used Post type.
 type Post struct {
 	ID        string    `json:"id,omitempty"`
 	Title     string    `json:"title,omitempty" validate:"omitempty,min=3,max=40"`
@@ -10,6 +11,7 @@ type Post struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
+// User describes the globally used User type.
 type User struct {
 	ID        string    `json:"id,omitempty"`
 	Name      string    `json:"name" validate:"omitempty,min=3,max=20"`

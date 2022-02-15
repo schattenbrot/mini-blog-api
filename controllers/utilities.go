@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// writeJSON is the helperfunction for sending back an HTTP response.
 func writeJSON(w http.ResponseWriter, status int, data ...interface{}) error {
 	if status == http.StatusNoContent {
 		w.Header().Set("Content-Type", "application/json")
@@ -24,6 +25,8 @@ func writeJSON(w http.ResponseWriter, status int, data ...interface{}) error {
 	return nil
 }
 
+// errorJSON is the helper function for creating an error message.
+// This internally then runs the writeJSON function to send the HTTP response.
 func errorJSON(w http.ResponseWriter, err error, status ...int) {
 	statusCode := http.StatusBadRequest
 

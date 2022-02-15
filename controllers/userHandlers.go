@@ -14,6 +14,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// InsertUser is the handler for inserting a user into the database.
 func (m *Repository) InsertUser(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 
@@ -69,6 +70,7 @@ func (m *Repository) InsertUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetUserById is the handler for retrieving a user from the database using its ID.
 func (m *Repository) GetUserById(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
@@ -92,6 +94,8 @@ func (m *Repository) GetUserById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// UpdateUserById is the handler for updating a user in database by its ID.
+// The body of the update needs either the name, email, password, or user-roles.
 func (m *Repository) UpdateUserById(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
@@ -134,6 +138,7 @@ func (m *Repository) UpdateUserById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// DeleteUser is the handler for deleting a user from the database by its ID.
 func (m *Repository) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 

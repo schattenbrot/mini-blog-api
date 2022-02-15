@@ -4,6 +4,7 @@ import (
 	"github.com/schattenbrot/mini-blog-api/models"
 )
 
+// DatabaseRepo represents the database repository.
 type DatabaseRepo interface {
 	// InsertPost inserts a post and returns the id or an error if any
 	InsertPost(p models.Post) (*string, error)
