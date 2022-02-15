@@ -44,7 +44,7 @@ func main() {
 	repo := controllers.NewMongoDBRepo(app, db)
 	controllers.NewHandlers(repo)
 	routeRepo := routes.NewMongoDBRepo(app, db)
-	routes.NewHandlers(routeRepo)
+	routes.NewRouter(routeRepo)
 
 	serve := &http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.Port),

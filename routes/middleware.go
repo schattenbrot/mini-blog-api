@@ -6,7 +6,8 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func (m *Repository) IsAuth(next http.Handler) http.Handler {
+// Auth checks if the requests is authorized to access the endpoint.
+func (m *Repository) Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("jwt")
 		if err != nil {
@@ -35,6 +36,7 @@ func (m *Repository) IsAuth(next http.Handler) http.Handler {
 	})
 }
 
+// notAuthenticated handles the response if the request is not authorized.
 func notAuthenticated(w http.ResponseWriter, err error) {
 	statusCode := http.StatusUnauthorized
 	w.Header().Add("WWW-Authenticate", err.Error())
