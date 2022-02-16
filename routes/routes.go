@@ -16,6 +16,8 @@ func Routes() *chi.Mux {
 		MaxAge:           300,
 	}))
 
+	r.Get("/", controllers.Repo.StatusHandler)
+
 	r.Route("/v1", func(r chi.Router) {
 		r.Route("/posts", postRouter)
 		r.Route("/users", userRouter)
