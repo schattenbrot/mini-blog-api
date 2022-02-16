@@ -1,5 +1,6 @@
 ### Go ###
 # Binaries for programs and plugins
+mini-blog-api
 *.exe
 *.exe~
 *.dll
