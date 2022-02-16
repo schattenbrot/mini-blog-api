@@ -19,7 +19,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v3
       with:
-        images: name/app
+        images: ${{github.actor}}/${{ github.repository }}
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
