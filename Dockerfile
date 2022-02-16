@@ -9,7 +9,7 @@ COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
 COPY . .
-RUN go build -v -o /usr/local/bin/app ./
+RUN CGO_ENABLED=0 go build -v -o api ./cmd/api
 
 # 
 # Run app
