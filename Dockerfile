@@ -4,10 +4,12 @@
 FROM golang:1.17 AS builder
 
 WORKDIR /go/src
-COPY . .
 
-# Buildkit needs to be enabled in order for TARGETARCH variable to exist on build
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -o api ./cmd/api
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+
+COPY . .
+RUN go build -v -o /usr/local/bin/app ./
 
 # 
 # Run app
