@@ -30,10 +30,11 @@ func main() {
 	validator := validator.New()
 
 	app := &config.AppConfig{
-		Version:   "1.0.0",
-		Config:    cfg,
-		Logger:    logger,
-		Validator: validator,
+		Version:         "1.0.0",
+		ServerStartTime: time.Now(),
+		Config:          cfg,
+		Logger:          logger,
+		Validator:       validator,
 	}
 	App = &Application{
 		App: app,

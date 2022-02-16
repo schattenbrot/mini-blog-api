@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -18,8 +19,9 @@ type Config struct {
 
 // AppConfig represents the shared application configuration.
 type AppConfig struct {
-	Version   string
-	Config    Config
-	Logger    *log.Logger
-	Validator *validator.Validate
+	Version         string
+	ServerStartTime time.Time
+	Config          Config
+	Logger          *log.Logger
+	Validator       *validator.Validate
 }
