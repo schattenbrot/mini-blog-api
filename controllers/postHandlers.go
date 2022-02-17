@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -45,9 +44,6 @@ func (m *Repository) InsertPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	post.Creator = userID
-
-	log.Println("UserID:", userID)
-	log.Println("Post:", post)
 
 	id, err := m.DB.InsertPost(post)
 	if err != nil {
