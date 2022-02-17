@@ -6,7 +6,6 @@ import (
 
 // DatabaseRepo represents the database repository.
 type DatabaseRepo interface {
-	// InsertPost inserts a post and returns the id or an error if any
 	InsertPost(p models.Post) (*string, error)
 	GetPosts() ([]*models.Post, error)
 	GetPostCreator(id string) (string, error)

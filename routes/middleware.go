@@ -33,6 +33,8 @@ func notAuthenticated(w http.ResponseWriter, err error) {
 	w.WriteHeader(statusCode)
 }
 
+// IsPostCreatorOrAdmin is a middleware to check if the user got the permission
+// to modify or delete the target post.
 func (m *Repository) IsPostCreatorOrAdmin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.JWT)
@@ -66,6 +68,8 @@ func (m *Repository) IsPostCreatorOrAdmin(next http.Handler) http.Handler {
 	})
 }
 
+// IsUserOrAdmin is a middleware to check if the user got the permission to
+// change or delete the target user.
 func (m *Repository) IsUserOrAdmin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.JWT)
@@ -96,6 +100,7 @@ func (m *Repository) IsUserOrAdmin(next http.Handler) http.Handler {
 	})
 }
 
+// setStatusForbidden sets the status to StatusForbidden
 func setStatusForbidden(w http.ResponseWriter) {
 	statusCode := http.StatusForbidden
 	w.WriteHeader(statusCode)
