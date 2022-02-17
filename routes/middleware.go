@@ -3,6 +3,7 @@ package routes
 import (
 	"net/http"
 
+	"github.com/go-chi/chi"
 	"github.com/schattenbrot/mini-blog-api/utils"
 )
 
@@ -29,5 +30,43 @@ func (m *Repository) Auth(next http.Handler) http.Handler {
 func notAuthenticated(w http.ResponseWriter, err error) {
 	statusCode := http.StatusUnauthorized
 	w.Header().Add("WWW-Authenticate", err.Error())
+	w.WriteHeader(statusCode)
+}
+
+func (m *Repository) IsPostCreatorOrAdmin(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.JWT)
+		if err != nil {
+			notCreatorOrAdmin(w)
+			return
+		}
+
+		// check for creator
+		postID := chi.URLParam(r, "id")
+		creator, err := m.DB.GetPostCreator(postID)
+		if err == nil {
+			if issuer == creator {
+				next.ServeHTTP(w, r)
+				return
+			}
+		}
+
+		// check for admin rights
+		userRoles, err := m.DB.GetUserRoles(issuer)
+		if err == nil {
+			for _, role := range userRoles {
+				if role == issuer {
+					next.ServeHTTP(w, r)
+					return
+				}
+			}
+		}
+
+		notCreatorOrAdmin(w)
+	})
+}
+
+func notCreatorOrAdmin(w http.ResponseWriter) {
+	statusCode := http.StatusForbidden
 	w.WriteHeader(statusCode)
 }
