@@ -20,7 +20,7 @@ type Post struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
 	Title     string             `bson:"title,omitempty"`
 	Text      string             `bson:"text,omitempty"`
-	User      string             `bson:"user,omitempty"`
+	Creator   string             `bson:"creator,omitempty"`
 	CreatedAt time.Time          `bson:"created_at,omitempty"`
 	UpdatedAt time.Time          `bson:"updated_at,omitempty"`
 }
@@ -41,7 +41,7 @@ func toModelPost(post *Post) models.Post {
 	modelPost.ID = post.ID.Hex()
 	modelPost.Title = post.Title
 	modelPost.Text = post.Text
-	modelPost.User = post.User
+	modelPost.Creator = post.Creator
 	modelPost.CreatedAt = post.CreatedAt
 	modelPost.UpdatedAt = post.UpdatedAt
 
@@ -70,7 +70,7 @@ func (m *mongoDBRepo) InsertPost(p models.Post) (*string, error) {
 	var post Post
 	post.Title = p.Title
 	post.Text = p.Text
-	post.User = p.User
+	post.Creator = p.Creator
 	post.CreatedAt = p.CreatedAt
 	post.UpdatedAt = p.UpdatedAt
 

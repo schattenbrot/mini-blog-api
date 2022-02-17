@@ -44,7 +44,7 @@ func (m *Repository) InsertPost(w http.ResponseWriter, r *http.Request) {
 		errorJSON(w, err)
 		return
 	}
-	post.User = userID
+	post.Creator = userID
 
 	log.Println("UserID:", userID)
 	log.Println("Post:", post)
