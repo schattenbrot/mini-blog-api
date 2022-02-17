@@ -13,34 +13,40 @@ func LoadConfig(cfg *Config) {
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println("error loading config file. Loading defaults instead")
 	}
 
 	portString, ok := viper.Get("PORT").(string)
 	if !ok {
-		log.Fatal("could not find port")
+		portString = "4000"
+		log.Println("could not find port. Defaulting to port 4000.")
 	}
 	port, err := strconv.Atoi(portString)
 	if err != nil {
-		log.Fatal("couldn't convert port to int")
+		port = 4000
+		log.Println("could not convert port to int. Defaulting to port 4000.")
 	}
 	cfg.Port = port
 
 	env, ok := viper.Get("ENVIRONMENT").(string)
 	if !ok {
-		log.Fatal("could not find environment")
+		env = "production"
+		log.Println("could not find environment. Defaulting to 'production'")
 	}
 	cfg.Env = env
 
 	dsn, ok := viper.Get("DSN").(string)
 	if !ok {
-		log.Fatal("could not find dsn")
+		dsn = "mongodb://localhost:27017"
+		log.Println("could not find dsn. Defaulting to 'mongodb://localhost:27017'")
 	}
 	cfg.DB.DSN = dsn
 
 	jwt, ok := viper.Get("JWT_TOKEN_SECRET").(string)
 	if !ok {
-		log.Fatal("could not find jwt token secret")
+		jwt = "wonderfulsecretphrase"
+		log.Println("could not find jwt token secret.",
+			"Defaulting to 'wonderfulsecretphrase'")
 	}
 	cfg.JWT = []byte(jwt)
 }
