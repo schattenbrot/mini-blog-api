@@ -37,7 +37,7 @@ func (m *Repository) IsPostCreatorOrAdmin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.JWT)
 		if err != nil {
-			notCreatorOrAdmin(w)
+			setStatusForbidden(w)
 			return
 		}
 
@@ -62,11 +62,41 @@ func (m *Repository) IsPostCreatorOrAdmin(next http.Handler) http.Handler {
 			}
 		}
 
-		notCreatorOrAdmin(w)
+		setStatusForbidden(w)
 	})
 }
 
-func notCreatorOrAdmin(w http.ResponseWriter) {
+func (m *Repository) IsUserOrAdmin(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.JWT)
+		if err != nil {
+			setStatusForbidden(w)
+			return
+		}
+
+		// check if correct user
+		userID := chi.URLParam(r, "id")
+		if issuer == userID {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		// check for admin rights
+		userRoles, err := m.DB.GetUserRoles(issuer)
+		if err == nil {
+			for _, role := range userRoles {
+				if role == "admin" {
+					next.ServeHTTP(w, r)
+					return
+				}
+			}
+		}
+
+		setStatusForbidden(w)
+	})
+}
+
+func setStatusForbidden(w http.ResponseWriter) {
 	statusCode := http.StatusForbidden
 	w.WriteHeader(statusCode)
 }

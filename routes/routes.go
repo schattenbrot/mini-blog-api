@@ -41,7 +41,7 @@ func userRouter(r chi.Router) {
 	r.Post("/login", controllers.Repo.Login)
 
 	r.With(Repo.Auth).Get("/{id}", controllers.Repo.GetUserById)
-	r.With(Repo.Auth).Patch("/{id}", controllers.Repo.UpdateUserById)
-	r.With(Repo.Auth).Delete("/{id}", controllers.Repo.DeleteUser)
+	r.With(Repo.Auth).With(Repo.IsUserOrAdmin).Patch("/{id}", controllers.Repo.UpdateUserById)
+	r.With(Repo.Auth).With(Repo.IsUserOrAdmin).Delete("/{id}", controllers.Repo.DeleteUser)
 	r.With(Repo.Auth).Get("/logout", controllers.Repo.Logout)
 }
