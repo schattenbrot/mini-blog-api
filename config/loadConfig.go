@@ -30,8 +30,8 @@ func LoadConfig(cfg *Config) {
 
 	env, ok := viper.Get("ENVIRONMENT").(string)
 	if !ok {
-		env = "production"
-		log.Println("could not find environment. Defaulting to 'production'")
+		env = "development"
+		log.Println("could not find environment. Defaulting to 'development'")
 	}
 	cfg.Env = env
 
