@@ -71,14 +71,109 @@ Base URL:
 
 > apiURL/v1/posts[/option]
 
-| REQUEST  | option    | middlewares                 | description                             |
-| -------- | --------- | --------------------------- | --------------------------------------- |
-| `GET`    | `/`       | -                           | Gets a list of all posts in a jsonarray |
-| `GET`    | `/paging` | -                           | Gets a list of all posts by paging.     |
-| `GET`    | `/{id}`   | -                           | Gets a single post by its ID.           |
-| `POST`   | `/`       | Auth                        | Adds a new POST                         |
-| `PATCH`  | `/{id}`   | Auth & IsPostCreatorOrAdmin | Patches a single post by its ID.        |
-| `DELETE` | `/{id}`   | Auth & IsPostCreatorOrAdmin | Deletes a single post by its ID.        |
+| REQUEST                   | option                     | middlewares                 | description                             |
+| ------------------------- | -------------------------- | --------------------------- | --------------------------------------- |
+| `GET`                     | `/`                        | -                           | Gets a list of all posts in a jsonarray |
+| [`GET`](#get-paging)      | `/paging?limit=%X&page=%Y` | -                           | Gets a list of all posts by paging.     |
+| [`GET`](#get-single-post) | `/{id}`                    | -                           | Gets a single post by its ID.           |
+| `POST`                    | `/`                        | Auth                        | Adds a new POST                         |
+| `PATCH`                   | `/{id}`                    | Auth & IsPostCreatorOrAdmin | Patches a single post by its ID.        |
+| `DELETE`                  | `/{id}`                    | Auth & IsPostCreatorOrAdmin | Deletes a single post by its ID.        |
+
+##### GET base
+
+- Doesn't take arguments
+
+Example Response:
+
+> Status: 200 OK
+
+> Header: Content-Type application/json
+
+```json
+[
+  {
+    "id": "62019c31ef131e8cd42847ab",
+    "title": "title",
+    "text": "this is the text",
+    "created_at": "2022-02-07T22:24:49.869Z",
+    "updated_at": "2022-02-07T22:24:49.869Z"
+  }
+]
+```
+
+If no document is found it will return status 200 and an empty array.
+
+##### GET paging
+
+- `%X` needs to be an integer
+- `%Y` needs to be an integer
+
+Example Response:
+
+> Status: 200 OK
+
+> Header: Content-Type application/json
+
+```json
+[
+  {
+    "id": "62019c31ef131e8cd42847ab",
+    "title": "title",
+    "text": "this is the text",
+    "created_at": "2022-02-07T22:24:49.869Z",
+    "updated_at": "2022-02-07T22:24:49.869Z"
+  }
+]
+```
+
+If no document is found it will return status 200 and an empty array.
+
+##### GET single post
+
+- Doesn't take any arguments
+
+Example Response:
+
+> Status: 200 OK
+
+> Header: Content-Type application/json
+
+```json
+{
+  "id": "62019c31ef131e8cd42847ab",
+  "title": "title",
+  "text": "this is the text",
+  "created_at": "2022-02-07T22:24:49.869Z",
+  "updated_at": "2022-02-07T22:24:49.869Z"
+}
+```
+
+If no document is found it will return Status 404 Not Found.
+
+##### POST a post
+
+Example Request Body:
+
+```json
+{
+  "name": "Username",
+  "email": "email@email.com",
+  "password": "12345aA;"
+}
+```
+
+Example Response:
+
+> Status: 201 Created
+
+> Header: Content-Type application/json
+
+```json
+{
+  "ok": true
+}
+```
 
 #### Users
 
@@ -118,6 +213,7 @@ Even though this project is made for private learning purposes I would never dec
 - pagination (might want to revisit later for a "better" response)
 - graphql?! why is this a thing?! D:
   - still cba'd
+- cba completing the readme for now D:
 
 ## License
 
