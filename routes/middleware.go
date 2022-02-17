@@ -3,33 +3,22 @@ package routes
 import (
 	"net/http"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/schattenbrot/mini-blog-api/utils"
 )
 
 // Auth checks if the requests is authorized to access the endpoint.
 func (m *Repository) Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("jwt")
+		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.JWT)
 		if err != nil {
 			notAuthenticated(w, err)
 			return
 		}
-
-		token, err := jwt.ParseWithClaims(cookie.Value, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
-			return []byte(m.App.Config.JWT), nil
-		})
-
-		if err != nil {
-			notAuthenticated(w, err)
-			return
-		}
-
-		claims := token.Claims.(*jwt.StandardClaims)
-		issuer := claims.Issuer
 
 		_, err = m.DB.GetUserById(issuer)
 		if err != nil {
 			notAuthenticated(w, err)
+			return
 		}
 
 		next.ServeHTTP(w, r)
