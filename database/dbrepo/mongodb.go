@@ -340,7 +340,7 @@ func (m *mongoDBRepo) GetUserRoles(id string) ([]string, error) {
 		return nil, err
 	}
 
-	collection := m.DB.Collection("posts")
+	collection := m.DB.Collection("users")
 
 	filter := User{ID: oid}
 
@@ -352,7 +352,8 @@ func (m *mongoDBRepo) GetUserRoles(id string) ([]string, error) {
 		Roles []string `bson:"roles"`
 	}
 	var result Result
-	err = collection.FindOne(ctx, filter, &options).Decode(&result)
+
+	err = collection.FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
