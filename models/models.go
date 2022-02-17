@@ -18,6 +18,6 @@ type User struct {
 	Name      string    `json:"name" validate:"omitempty,min=3,max=20"`
 	Email     string    `json:"email" validate:"omitempty,email"`
 	Password  string    `json:"password,omitempty" validate:"omitempty,min=8,max=24"`
-	Roles     []string  `json:"roles" validate:"omitempty,dive,eq=user|admin"`
+	Roles     []string  `json:"roles" validate:"omitempty,dive,eq=user"`
 	CreatedAt time.Time `json:"created_at"`
 }
