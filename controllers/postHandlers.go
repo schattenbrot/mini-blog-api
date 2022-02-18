@@ -11,6 +11,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/schattenbrot/mini-blog-api/database/dbrepo"
 	"github.com/schattenbrot/mini-blog-api/models"
+	"github.com/schattenbrot/mini-blog-api/utils"
 )
 
 // InsertPost is the handler for adding posts.
@@ -36,6 +37,13 @@ func (m *Repository) InsertPost(w http.ResponseWriter, r *http.Request) {
 		errorJSON(w, err)
 		return
 	}
+
+	userID, err := utils.GetIssuerFromCookie(r, m.App.Config.JWT)
+	if err != nil {
+		errorJSON(w, err)
+		return
+	}
+	post.Creator = userID
 
 	id, err := m.DB.InsertPost(post)
 	if err != nil {

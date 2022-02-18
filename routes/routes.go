@@ -27,13 +27,13 @@ func Routes() *chi.Mux {
 }
 
 func postRouter(r chi.Router) {
-	r.With(Repo.Auth).Post("/", controllers.Repo.InsertPost)
-	r.With(Repo.Auth).Patch("/{id}", controllers.Repo.UpdatePostById)
-	r.With(Repo.Auth).Delete("/{id}", controllers.Repo.DeletePost)
-
 	r.Get("/", controllers.Repo.GetAllPosts)
 	r.Get("/paging", controllers.Repo.GetPaginatedPosts)
 	r.Get("/{id}", controllers.Repo.GetPostById)
+
+	r.With(Repo.Auth).Post("/", controllers.Repo.InsertPost)
+	r.With(Repo.Auth).With(Repo.IsPostCreatorOrAdmin).Patch("/{id}", controllers.Repo.UpdatePostById)
+	r.With(Repo.Auth).With(Repo.IsPostCreatorOrAdmin).Delete("/{id}", controllers.Repo.DeletePost)
 }
 
 func userRouter(r chi.Router) {
@@ -41,7 +41,7 @@ func userRouter(r chi.Router) {
 	r.Post("/login", controllers.Repo.Login)
 
 	r.With(Repo.Auth).Get("/{id}", controllers.Repo.GetUserById)
-	r.With(Repo.Auth).Patch("/{id}", controllers.Repo.UpdateUserById)
-	r.With(Repo.Auth).Delete("/{id}", controllers.Repo.DeleteUser)
+	r.With(Repo.Auth).With(Repo.IsUserOrAdmin).Patch("/{id}", controllers.Repo.UpdateUserById)
+	r.With(Repo.Auth).With(Repo.IsUserOrAdmin).Delete("/{id}", controllers.Repo.DeleteUser)
 	r.With(Repo.Auth).Get("/logout", controllers.Repo.Logout)
 }

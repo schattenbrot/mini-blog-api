@@ -63,6 +63,7 @@ func main() {
 	}
 }
 
+// openDB creates a new database connection and returns the Database
 func openDB() *mongo.Database {
 	client, err := mongo.NewClient(options.Client().ApplyURI(App.App.Config.DB.DSN))
 	if err != nil {

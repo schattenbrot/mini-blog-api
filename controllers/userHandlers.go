@@ -27,8 +27,7 @@ func (m *Repository) InsertUser(w http.ResponseWriter, r *http.Request) {
 	user.CreatedAt = time.Now()
 	user.Roles = []string{"user"}
 
-	v := validator.New()
-	err = v.Struct(user)
+	err = m.App.Validator.Struct(user)
 	if err != nil {
 		errorJSON(w, err)
 		return
@@ -37,6 +36,11 @@ func (m *Repository) InsertUser(w http.ResponseWriter, r *http.Request) {
 	passwordValid := utils.PasswordIsValid(user.Password)
 	if !passwordValid {
 		err = errors.New("password is not valid")
+		errorJSON(w, err)
+		return
+	}
+	if user.Name == "" && user.Email == "" {
+		err = errors.New("registering a user needs a username or email")
 		errorJSON(w, err)
 		return
 	}

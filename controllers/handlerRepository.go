@@ -13,7 +13,7 @@ type Repository struct {
 	DB  database.DatabaseRepo
 }
 
-// Repo is the handler repository to share the app configuration.
+// Repo is the repository to share the app configuration.
 var Repo *Repository
 
 // NewTestDBRepo returns a new repository for testing purposes.

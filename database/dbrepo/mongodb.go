@@ -20,6 +20,7 @@ type Post struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
 	Title     string             `bson:"title,omitempty"`
 	Text      string             `bson:"text,omitempty"`
+	Creator   string             `bson:"creator,omitempty"`
 	CreatedAt time.Time          `bson:"created_at,omitempty"`
 	UpdatedAt time.Time          `bson:"updated_at,omitempty"`
 }
@@ -40,6 +41,7 @@ func toModelPost(post *Post) models.Post {
 	modelPost.ID = post.ID.Hex()
 	modelPost.Title = post.Title
 	modelPost.Text = post.Text
+	modelPost.Creator = post.Creator
 	modelPost.CreatedAt = post.CreatedAt
 	modelPost.UpdatedAt = post.UpdatedAt
 
@@ -68,6 +70,7 @@ func (m *mongoDBRepo) InsertPost(p models.Post) (*string, error) {
 	var post Post
 	post.Title = p.Title
 	post.Text = p.Text
+	post.Creator = p.Creator
 	post.CreatedAt = p.CreatedAt
 	post.UpdatedAt = p.UpdatedAt
 
@@ -138,6 +141,37 @@ func (m *mongoDBRepo) GetPosts() ([]*models.Post, error) {
 	}
 
 	return posts, nil
+}
+
+// GetPostCreator fetches the creator of a post from the database.
+// Returns the creator's id and an error if any occured.
+func (m *mongoDBRepo) GetPostCreator(id string) (string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	oid, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return "", err
+	}
+
+	collection := m.DB.Collection("posts")
+
+	filter := Post{ID: oid}
+
+	proj := bson.M{"creator": 1}
+	var options options.FindOneOptions
+	options.SetProjection(proj)
+
+	type Result struct {
+		Creator primitive.ObjectID `bson:"creator"`
+	}
+	var result Result
+	err = collection.FindOne(ctx, filter, &options).Decode(&result)
+	if err != nil {
+		return "", err
+	}
+
+	return result.Creator.Hex(), nil
 }
 
 // GetPostsByPage gets a list of posts by page number and page limit.
@@ -293,6 +327,38 @@ func (m *mongoDBRepo) GetUserById(id string) (*models.User, error) {
 	fetchedUser := toModelUser(&user)
 
 	return &fetchedUser, nil
+}
+
+// GetUserRoles fetches the roles of a user from the database.
+// Returns the user's roles and an error if any occured.
+func (m *mongoDBRepo) GetUserRoles(id string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	oid, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	collection := m.DB.Collection("users")
+
+	filter := User{ID: oid}
+
+	proj := bson.M{"roles": 1}
+	var options options.FindOneOptions
+	options.SetProjection(proj)
+
+	type Result struct {
+		Roles []string `bson:"roles"`
+	}
+	var result Result
+
+	err = collection.FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+
+	return result.Roles, err
 }
 
 // GetUserByMail retrieves a user from the database by its email.

@@ -34,16 +34,28 @@ func (m *testDBRepo) InsertUser(u models.User) (*string, error) {
 	var s string
 	return &s, nil
 }
+
 func (m *testDBRepo) GetUserById(id string) (*models.User, error) {
 	var user models.User
 	return &user, nil
 }
+
 func (m *testDBRepo) UpdateUser(u models.User) error {
 	return nil
 }
+
 func (m *testDBRepo) DeleteUser(id string) error {
 	return nil
 }
+
 func (m *testDBRepo) GetUserByEmail(email string) (*models.User, error) {
+	return nil, nil
+}
+
+func (m *testDBRepo) GetPostCreator(id string) (string, error) {
+	return "", nil
+}
+
+func (m *testDBRepo) GetUserRoles(id string) ([]string, error) {
 	return nil, nil
 }
