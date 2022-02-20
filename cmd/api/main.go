@@ -11,6 +11,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/schattenbrot/mini-blog-api/config"
 	"github.com/schattenbrot/mini-blog-api/controllers"
+	"github.com/schattenbrot/mini-blog-api/middlewares"
 	"github.com/schattenbrot/mini-blog-api/routes"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -44,8 +45,8 @@ func main() {
 
 	repo := controllers.NewMongoDBRepo(app, db)
 	controllers.NewHandlers(repo)
-	routeRepo := routes.NewMongoDBRepo(app, db)
-	routes.NewRouter(routeRepo)
+	middlewareRepo := middlewares.NewMongoDBRepo(app, db)
+	middlewares.NewRouter(middlewareRepo)
 
 	serve := &http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.Port),

@@ -1,4 +1,4 @@
-package routes
+package middlewares
 
 import (
 	"github.com/schattenbrot/mini-blog-api/config"
