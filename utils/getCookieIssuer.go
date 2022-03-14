@@ -8,8 +8,8 @@ import (
 
 // GetIssuerFromCookie is a helper function that takes a request and tht
 // JWT_SECRET_TOKEN to retrieve the issuer and an error if any occured.
-func GetIssuerFromCookie(r *http.Request, jwtSecret []byte) (string, error) {
-	cookie, err := r.Cookie("jwt")
+func GetIssuerFromCookie(r *http.Request, cookieName string, jwtSecret []byte) (string, error) {
+	cookie, err := r.Cookie(cookieName)
 	if err != nil {
 		return "", err
 	}

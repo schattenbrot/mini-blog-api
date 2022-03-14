@@ -15,12 +15,14 @@ A basic API for a blog page.
 
 All variables in the `.env` file are optional.
 
-| variable         | description                                                       | default                     | default-.env            |
-| ---------------- | ----------------------------------------------------------------- | --------------------------- | ----------------------- |
-| PORT             | the port number this server will listen on                        | `4000`                      | `4000`                  |
-| ENVIRONMENT      | has no impact whatsoever yet but can be seen in the server status | `development`               | `development`           |
-| DSN              | mongodb connection string                                         | `mongodb://localhost:27017` | `mongodb://db:27017`    |
-| JWT_TOKEN_SECRET | secret phrase for encrypting the passwords                        | `wonderfulsecretphrase`     | `wonderfulsecretphrase` |
+| variable             | description                                                       | default                     | default-.env            |
+| -------------------- | ----------------------------------------------------------------- | --------------------------- | ----------------------- |
+| PORT                 | the port number this server will listen on                        | `4000`                      | `4000`                  |
+| ENVIRONMENT          | has no impact whatsoever yet but can be seen in the server status | `development`               | `development`           |
+| DSN                  | mongodb connection string                                         | `mongodb://localhost:27017` | `mongodb://db:27017`    |
+| JWT_SECRET           | secret phrase for encrypting the passwords                        | `wonderfulsecretphrase`     | `wonderfulsecretphrase` |
+| CORS_ALLOWED_ORIGINS | allowed domains for CORS requests separated by spaces             | `http://* https://*`        | `http://* https://*`    |
+| COOKIE_NAME          | cookie name which gets set in the browser                         | `uwu-blog-cookie`           | `uwu-blog-cookie`       |
 
 ### docker-compose
 
