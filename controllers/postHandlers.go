@@ -38,7 +38,7 @@ func (m *Repository) InsertPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := utils.GetIssuerFromCookie(r, m.App.Config.JWT)
+	userID, err := utils.GetIssuerFromCookie(r, m.App.Config.CookieName, m.App.Config.JWT)
 	if err != nil {
 		errorJSON(w, err)
 		return

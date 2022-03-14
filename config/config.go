@@ -9,9 +9,11 @@ import (
 
 // Config represents the app's base configuration.
 type Config struct {
-	Port int
-	Env  string
-	DB   struct {
+	Port       int
+	Env        string
+	Cors       []string
+	CookieName string
+	DB         struct {
 		DSN string
 	}
 	JWT []byte

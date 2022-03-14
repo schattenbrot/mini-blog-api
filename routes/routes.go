@@ -8,10 +8,11 @@ import (
 )
 
 // Routes returns a fully configured Mux of the chi-router.
-func Routes() *chi.Mux {
+func Routes(corsAllowedOrigins []string) *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   corsAllowedOrigins,
 		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE"},
 		AllowCredentials: true,
 		MaxAge:           300,

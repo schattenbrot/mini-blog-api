@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"strconv"
+	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -30,8 +31,8 @@ func LoadConfig(cfg *Config) {
 
 	env, ok := viper.Get("ENVIRONMENT").(string)
 	if !ok {
-		env = "development"
-		log.Println("could not find environment. Defaulting to 'development'")
+		env = "dev"
+		log.Println("could not find environment. Defaulting to 'dev'")
 	}
 	cfg.Env = env
 
@@ -49,4 +50,18 @@ func LoadConfig(cfg *Config) {
 			"Defaulting to 'wonderfulsecretphrase'")
 	}
 	cfg.JWT = []byte(jwt)
+
+	corsString, ok := viper.Get("CORS_ALLOWED_ORIGINS").(string)
+	if !ok {
+		corsString = "http://* https://*"
+		log.Println("could not find cors allowed origin.", "Defaulting to 'http://*' and 'https://*'")
+	}
+	cfg.Cors = strings.Split(corsString, " ")
+
+	cookieName, ok := viper.Get("COOKIE_NAME").(string)
+	if !ok {
+		cookieName = "uwu-blog-cookie"
+		log.Println("could not find cookie name.", "Defaulting to 'uwu-blog-cookie'")
+	}
+	cfg.CookieName = cookieName
 }
