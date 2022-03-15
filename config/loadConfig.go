@@ -63,5 +63,12 @@ func LoadConfig(cfg *Config) {
 		cookieName = "uwu-blog-cookie"
 		log.Println("could not find cookie name.", "Defaulting to 'uwu-blog-cookie'")
 	}
-	cfg.CookieName = cookieName
+	cfg.Cookie.Name = cookieName
+
+	cookieSameSite, ok := viper.Get("COOKIE_SAME_SITE").(string)
+	if !ok {
+		cookieSameSite = "lax"
+		log.Println("could not find cookie same site. Defaulting to 'lax'")
+	}
+	cfg.Cookie.SameSite = cookieSameSite
 }

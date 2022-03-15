@@ -62,13 +62,17 @@ func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cookie := &http.Cookie{
-		Name:     m.App.Config.CookieName,
+		Name:     m.App.Config.Cookie.Name,
 		Path:     "/",
 		Value:    tokenString,
 		Expires:  currTime.Add(time.Hour * 24),
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
-		// Secure:   true,
+	}
+
+	if m.App.Config.Cookie.SameSite == "none" {
+		cookie.SameSite = http.SameSiteNoneMode
+		cookie.Secure = true
 	}
 
 	http.SetCookie(w, cookie)
@@ -85,7 +89,7 @@ func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 // Logout logs the user out
 func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	cookie := &http.Cookie{
-		Name:     m.App.Config.CookieName,
+		Name:     m.App.Config.Cookie.Name,
 		Path:     "/",
 		Value:    "",
 		Expires:  time.Now().Add(-time.Hour),

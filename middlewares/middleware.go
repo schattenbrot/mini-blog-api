@@ -10,7 +10,7 @@ import (
 // Auth checks if the requests is authorized to access the endpoint.
 func (m *Repository) Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.CookieName, m.App.Config.JWT)
+		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.Cookie.Name, m.App.Config.JWT)
 		if err != nil {
 			notAuthenticated(w, err)
 			return
@@ -37,7 +37,7 @@ func notAuthenticated(w http.ResponseWriter, err error) {
 // to modify or delete the target post.
 func (m *Repository) IsPostCreatorOrAdmin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.CookieName, m.App.Config.JWT)
+		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.Cookie.Name, m.App.Config.JWT)
 		if err != nil {
 			setStatusForbidden(w)
 			return
@@ -72,7 +72,7 @@ func (m *Repository) IsPostCreatorOrAdmin(next http.Handler) http.Handler {
 // change or delete the target user.
 func (m *Repository) IsUserOrAdmin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.CookieName, m.App.Config.JWT)
+		issuer, err := utils.GetIssuerFromCookie(r, m.App.Config.Cookie.Name, m.App.Config.JWT)
 		if err != nil {
 			setStatusForbidden(w)
 			return
