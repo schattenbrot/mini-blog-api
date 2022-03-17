@@ -125,7 +125,10 @@ func (m *mongoDBRepo) GetPosts() ([]*models.Post, error) {
 
 	filter := bson.D{}
 
-	cursor, err := collection.Find(ctx, filter)
+	opts := options.Find()
+	opts.SetSort(bson.D{{"created_at", -1}})
+
+	cursor, err := collection.Find(ctx, filter, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -185,11 +188,12 @@ func (m *mongoDBRepo) GetPostsByPage(page, limit int) ([]*models.Post, error) {
 	collection := m.DB.Collection("posts")
 
 	filter := bson.M{}
-	findOptions := options.FindOptions{}
+	findOptions := options.Find()
 	findOptions.SetSkip((int64(page) - 1) * int64(limit))
 	findOptions.SetLimit(int64(limit))
+	findOptions.SetSort(bson.D{{"created_at", -1}})
 
-	cursor, err := collection.Find(ctx, filter, &findOptions)
+	cursor, err := collection.Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
