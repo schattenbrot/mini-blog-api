@@ -78,11 +78,13 @@ func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, cookie)
 
 	type jsonResp struct {
-		OK bool `json:"ok"`
+		OK bool   `json:"ok"`
+		ID string `json:"id"`
 	}
 
 	writeJSON(w, http.StatusOK, jsonResp{
 		OK: true,
+		ID: user.ID,
 	})
 }
 
@@ -98,11 +100,5 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 
 	http.SetCookie(w, cookie)
 
-	type jsonResp struct {
-		OK bool `json:"ok"`
-	}
-
-	writeJSON(w, http.StatusOK, jsonResp{
-		OK: true,
-	})
+	writeJSON(w, http.StatusNoContent)
 }
