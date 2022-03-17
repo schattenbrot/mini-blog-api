@@ -62,7 +62,7 @@ func toModelUser(user *User) models.User {
 }
 
 // InsertPost inserts a given post into the database.
-// Returns the post ID of the inserted post and an error if any occured.
+// Returns the post ID of the inserted post and an error if any occurred.
 func (m *mongoDBRepo) InsertPost(p models.Post) (*string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -87,7 +87,7 @@ func (m *mongoDBRepo) InsertPost(p models.Post) (*string, error) {
 }
 
 // GetPostById gets a post from the database by its ID.
-// Returns a post and an error if any occured.
+// Returns a post and an error if any occurred.
 func (m *mongoDBRepo) GetPostById(id string) (*models.Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -114,7 +114,7 @@ func (m *mongoDBRepo) GetPostById(id string) (*models.Post, error) {
 }
 
 // GetPosts gets a list of posts from the database.
-// Returns a list of posts and an error if any occured.
+// Returns a list of posts and an error if any occurred.
 func (m *mongoDBRepo) GetPosts() ([]*models.Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -208,7 +208,7 @@ func (m *mongoDBRepo) GetPostsByPage(page, limit int) ([]*models.Post, error) {
 }
 
 // UpdatePost updates a given post in the database.
-// Returns an error if any occured.
+// Returns an error if any occurred.
 func (m *mongoDBRepo) UpdatePost(p models.Post) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -249,7 +249,7 @@ func (m *mongoDBRepo) UpdatePost(p models.Post) error {
 }
 
 // DeleteOnePost deletes one post from the database by its ID.
-// Returns an error if any occured.
+// Returns an error if any occurred.
 func (m *mongoDBRepo) DeleteOnePost(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -277,7 +277,7 @@ func (m *mongoDBRepo) DeleteOnePost(id string) error {
 }
 
 // InsertUser inserts a given user into the database.
-// Returns the user ID of the inserted user and an error if any occured.
+// Returns the user ID of the inserted user and an error if any occurred.
 func (m *mongoDBRepo) InsertUser(u models.User) (*string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -303,7 +303,7 @@ func (m *mongoDBRepo) InsertUser(u models.User) (*string, error) {
 }
 
 // GetUserById retrieves a user from the database by its ID.
-// Returns a user and an error if any occured.
+// Returns a user and an error if any occurred.
 func (m *mongoDBRepo) GetUserById(id string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -330,7 +330,7 @@ func (m *mongoDBRepo) GetUserById(id string) (*models.User, error) {
 }
 
 // GetUserRoles fetches the roles of a user from the database.
-// Returns the user's roles and an error if any occured.
+// Returns the user's roles and an error if any occurred.
 func (m *mongoDBRepo) GetUserRoles(id string) ([]string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -362,7 +362,7 @@ func (m *mongoDBRepo) GetUserRoles(id string) ([]string, error) {
 }
 
 // GetUserByMail retrieves a user from the database by its email.
-// Returns a user and an error if any occured.
+// Returns a user and an error if any occurred.
 func (m *mongoDBRepo) GetUserByEmail(email string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -384,7 +384,7 @@ func (m *mongoDBRepo) GetUserByEmail(email string) (*models.User, error) {
 }
 
 // UpdateUser updates a given user.
-// Returns an error if any occured.
+// Returns an error if any occurred.
 func (m *mongoDBRepo) UpdateUser(u models.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -427,7 +427,7 @@ func (m *mongoDBRepo) UpdateUser(u models.User) error {
 }
 
 // DeleteUser deletes a user from the database by its ID.
-// Returns an error if any occured.
+// Returns an error if any occurred.
 func (m *mongoDBRepo) DeleteUser(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
