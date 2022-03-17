@@ -144,7 +144,7 @@ func (m *mongoDBRepo) GetPosts() ([]*models.Post, error) {
 }
 
 // GetPostCreator fetches the creator of a post from the database.
-// Returns the creator's id and an error if any occured.
+// Returns the creator's id and an error if any occurred.
 func (m *mongoDBRepo) GetPostCreator(id string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -175,7 +175,7 @@ func (m *mongoDBRepo) GetPostCreator(id string) (string, error) {
 }
 
 // GetPostsByPage gets a list of posts by page number and page limit.
-// Returns a list of posts and an error if any occured.
+// Returns a list of posts and an error if any occurred.
 func (m *mongoDBRepo) GetPostsByPage(page, limit int) ([]*models.Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
