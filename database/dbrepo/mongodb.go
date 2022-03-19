@@ -13,6 +13,7 @@ import (
 
 var ErrorTitleAndTextEmpty = "title and text cannot be empty"
 var ErrorDocumentNotFound = "document not found"
+var ErrorAlreadyUpToDate = "up to date"
 var ErrorNameEmailPasswordEmpty = "either name or email or password cannot be empty"
 
 // Post is the Post type used for communication with the mongo driver.
@@ -244,8 +245,13 @@ func (m *mongoDBRepo) UpdatePost(p models.Post) error {
 		return err
 	}
 
-	if result.ModifiedCount == 0 {
+	if result.MatchedCount == 0 {
 		err = errors.New(ErrorDocumentNotFound)
+		return err
+	}
+
+	if result.ModifiedCount == 0 {
+		err = errors.New(ErrorAlreadyUpToDate)
 		return err
 	}
 
@@ -422,8 +428,13 @@ func (m *mongoDBRepo) UpdateUser(u models.User) error {
 		return err
 	}
 
-	if result.ModifiedCount == 0 {
+	if result.MatchedCount == 0 {
 		err = errors.New(ErrorDocumentNotFound)
+		return err
+	}
+
+	if result.ModifiedCount == 0 {
+		err = errors.New(ErrorAlreadyUpToDate)
 		return err
 	}
 
