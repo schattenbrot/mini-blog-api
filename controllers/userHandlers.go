@@ -131,6 +131,9 @@ func (m *Repository) UpdateUserById(w http.ResponseWriter, r *http.Request) {
 		if err.Error() == dbrepo.ErrorDocumentNotFound {
 			errorJSON(w, err, http.StatusNotFound)
 			return
+		} else if err.Error() == dbrepo.ErrorAlreadyUpToDate {
+			errorJSON(w, err, http.StatusOK)
+			return
 		}
 		errorJSON(w, err, http.StatusInternalServerError)
 		return
