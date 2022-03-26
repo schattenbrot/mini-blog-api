@@ -39,8 +39,8 @@ func (m *Repository) InsertUser(w http.ResponseWriter, r *http.Request) {
 		errorJSON(w, err)
 		return
 	}
-	if user.Name == "" && user.Email == "" {
-		err = errors.New("registering a user needs a username or email")
+	if user.Name == "" || user.Email == "" {
+		err = errors.New("registering a user needs a username and email")
 		errorJSON(w, err)
 		return
 	}
@@ -130,6 +130,9 @@ func (m *Repository) UpdateUserById(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err.Error() == dbrepo.ErrorDocumentNotFound {
 			errorJSON(w, err, http.StatusNotFound)
+			return
+		} else if err.Error() == dbrepo.ErrorAlreadyUpToDate {
+			errorJSON(w, err, http.StatusOK)
 			return
 		}
 		errorJSON(w, err, http.StatusInternalServerError)
